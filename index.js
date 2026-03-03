@@ -7,8 +7,14 @@ import mongoose from 'mongoose';
 // Importando o model
 import Game from "./models/Games.js"
 
+// importando as rotas (routes)
+import gameRoutes from "./routes/gameRoutes.js"
+
 // Configurações do Express
 app.use(express.json()); // permite o uso de json na aplicação
+
+// ativando a utilização das rotas 
+app.use("/", gameRoutes)
 
 // Iniciando a conexão com o banco de dados MongoDB
 mongoose.connect("mongodb://127.0.0.1:27017/api-the-games") //porta local padrão 
