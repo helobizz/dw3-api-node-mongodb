@@ -21,6 +21,7 @@
   "homepage": "https://github.com/helobizz/dw3-api-node-mongodb#readme",
   "dependencies": {
     "express": "^5.2.1",
+    "mongodb": "^7.1.0",
     "mongoose": "^9.2.2",
     "nodemon": "^3.1.14"
   }
