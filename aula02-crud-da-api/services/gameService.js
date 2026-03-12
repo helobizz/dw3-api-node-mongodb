@@ -45,18 +45,33 @@ class gameService {
     // MÉTODO PARA ALTERAR UM JOGO
     async Update(id, title, platform, year, price) {
         try {
-            await Game.findByIdAndUpdate(id, {
+            const updateGame = await Game.findByIdAndUpdate(id, {
                 title,
                 platform,
                 year,
                 price
-            })
+            },
+                { new: true }
+        )
             console.log(`O jogo com a id: ${id} foi alterado.`)
+            return updateGame
+        } catch (error) {
+            console.log(error)
+        }
+    }
+    
+    // MÉTODO PARA LISTAR UM JOGO ÚNICO
+    async getOne(id) {
+        try {
+            const game = await Game.findOne({ _id: id })
+            return game
         } catch (error) {
             console.log(error)
         }
     }
 }
+
+
 
 //exportando a classe
 export default new gameService()
