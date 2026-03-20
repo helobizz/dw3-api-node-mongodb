@@ -15,6 +15,17 @@ class userService {
             console.log(error)
         }
     }
+
+    // Método para BUSCAR um usuário 
+    async getOne(email) {
+        try {
+            // O método .findOne() busca um resgistro no banco de dados
+            const user = await User.findOne({ email : email })
+            return user
+        } catch(error) {
+            console.log(error)
+        }
+    }
 }
 
 // exportando a classe
