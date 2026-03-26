@@ -4,6 +4,9 @@ import userService from "../services/userService.js";
 // Importando o JWT (criação de token)
 import jwt from 'jsonwebtoken';
 
+// Importando o bcrypt
+import bcrypt from "bcrypt"
+
 // IMPORTANDO AS VARIÁVEIS DE AMBIENTE
 import dotenv from "dotenv";
 // Configurando o dotenv
@@ -20,8 +23,13 @@ const createUser = async(req, res) => {
     try {
         // coletantando dados
         const {name, email, password} = req.body
+
+        // Gerando o HASH de senha
+        const salt = bcrypt.genSaltSync(10);
+        const hash = bcrypt.hashSync(password, salt);
+
         // enviando para cadastrar 
-        await userService.Create(name, email, password)
+        await userService.Create(name, email, hash)
         // retornando uma resposta
         res.status(201).json({ message: "Usuário cadastrado com sucesso!"})
         // cód. 201 = created
@@ -41,8 +49,11 @@ const loginUser = async (req, res) => {
             const user = await userService.getOne(email) // esse getOne foi criado no userService
             // Se o usuário for encontrado
             if (user != undefined) {
-                // Verificando se a senha está correta
-                if (user.password == password) { // verificando se a senha do banco bate com o que foi digitado
+
+                // Verificando o HASH DE SENHA
+                const correct = bcrypt.compareSync(password, user.password)
+                // Verificando de o HASH FOI VALIDADO
+                if (correct) { // verificando se a senha do banco bate com o que foi digitado
                     // CRIAR O TOKEN
                     jwt.sign({id: user._id, email: user.email}, JWTSecret, {
                         expiresIn: '48h'}, (error, token) => { // tempo que o token leva para expirar
